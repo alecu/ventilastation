@@ -12,10 +12,17 @@ from deepspace import deepspace
 
 
 sounds = {}
-for sn in ["shoot1", "explosion2", "explosion3", "shoot3"]:
+for sn in ["shoot1", "explosion2", "explosion3", "shoot3", "demo/vladfarty/hit",
+    "line", "triangle", "square", "pentagon", "superhexagon", "begin", "awesome", "die", "excellent", "gameover",
+    "menuchoose", "menuselect", "rankup", "start", "wonderful", "hexagon",
+    "es/super ventilagon", "es/buenisimo", "es/perdiste", "es/empeza", "es/linea",
+    "es/triangulo", "es/cuadrado", "es/pentagono", "es/ventilagono"]:
     sounds[bytes(sn, "latin1")] = pyglet.media.load("sounds/%s.wav" % sn, streaming=False)
 
-for mn in ["credits", "vy-gameover", "vy-main", "vy-3warps"]:
+for mn in ["credits", "vy-gameover", "vy-main", "vy-3warps", "1",
+           "demo/vladfarty/intro", "demo/vladfarty/part2",
+           "demo/vladfarty/farty-lion", "demo/vladfarty/credits",
+           "demo/vladfarty/happy-place"]:
     sounds[bytes(mn, "latin1")] = pyglet.media.load("sounds/%s.wav" % mn, streaming=False)
 
 sound_queue = []
@@ -47,6 +54,16 @@ image_stripes = {
     "16": imagenes.tecno_estructuras_flat_png,
     "17": imagenes.menatwork_flat_png,
     "18": imagenes.yourgame_flat_png,
+    "19": imagenes.vga_pc734_png,
+    "20": imagenes.vga_cp437_png,
+    "21": imagenes.vlad_farting_flat_png,
+    "22": imagenes.farty_lion_flat_png,
+    "23": imagenes.ready_png,
+    "24": imagenes.bg64_flat_png,
+    "25": imagenes.copyright_png,
+    "26": imagenes.bgspeccy_flat_png,
+    "27": imagenes.reset_png,
+    "28": imagenes.farty_lionhead_flat_png,
 }
 spritedata = bytearray( b"\0\0\0\xff\xff" * 100)
 
@@ -55,6 +72,7 @@ fps_display = pyglet.window.FPSDisplay(window)
 keys = key.KeyStateHandler()
 
 joysticks = pyglet.input.get_joysticks()
+print(joysticks)
 if joysticks:
     joystick = joysticks[0]
     joystick.open()
@@ -143,15 +161,23 @@ class PygletEngine():
         def send_keys():
             reset = keys[key.P]
             try:
-                left = joystick.x < -0.5
-                right = joystick.x > 0.5
-                up = joystick.y < -0.5
-                down = joystick.y > 0.5
+                left = joystick.x < -0.5 or joystick.hat_x < -0.5 or joystick.buttons[4]
+                right = joystick.x > 0.5 or joystick.hat_x > 0.5 or joystick.buttons[5]
+                up = joystick.y < -0.5 or joystick.hat_y > 0.5
+                down = joystick.y > 0.5 or joystick.hat_y < -0.5
 
-                boton = joystick.buttons[0] | joystick.buttons[1] | joystick.buttons[2] | joystick.buttons[3]
+
+                boton = joystick.buttons[0] or joystick.buttons[1] or joystick.buttons[2] or joystick.buttons[3] # or joystick.buttons[4] or joystick.buttons[5] or joystick.buttons[6]
+
                 accel = joystick.rz > 0
                 decel = joystick.z > 0
-                reset = joystick.buttons[8]
+                try:
+                    reset = joystick.buttons[8]
+                except:
+                    reset = joystick.buttons[7]
+                left = left or keys[key.LEFT]
+                right = right or keys[key.RIGHT]
+
             except Exception:
                 left = keys[key.LEFT]
                 right = keys[key.RIGHT]
@@ -175,7 +201,7 @@ class PygletEngine():
             return palette[self.i:self.i+led_count*4]
 
         def get_visible_column(sprite_x, sprite_width, render_column):
-            sprite_column = (render_column - sprite_x + COLUMNS) % COLUMNS
+            sprite_column = sprite_width - 1 - ((render_column - sprite_x + COLUMNS) % COLUMNS)
             if 0 <= sprite_column < sprite_width:
                 return sprite_column
             else:
@@ -202,8 +228,8 @@ class PygletEngine():
 
             # el sprite 0 se dibuja arriba de todos los otros
             for n in range(99, -1, -1):
-                x, y, image, frame, perspective = unpack("BBBbb", spritedata[n*5:n*5+5])
-                if frame == -1:
+                x, y, image, frame, perspective = unpack("BBBBb", spritedata[n*5:n*5+5])
+                if frame == 255:
                     continue
 
                 strip = image_stripes["%d" % image]

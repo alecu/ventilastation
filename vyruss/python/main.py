@@ -8,10 +8,10 @@ def update_over_the_air():
 
 class GamesMenu(menu.Menu):
     OPTIONS = [
-        ('vyruss', 7, 3, 64),
-        ('vong', 7, 1, 64),
-        ('credits', 7, 0, 64),
-        ('ventilagon', 7, 2, 64),
+        ('vyruss', 7, 0, 64),
+        ('vladfarty', 7, 2, 64),
+        ('credits', 7, 3, 64),
+        ('ventilagon', 7, 1, 64),
     ]
 
     def on_option_pressed(self, option_index):
@@ -25,9 +25,9 @@ class GamesMenu(menu.Menu):
             import credits
             director.push(credits.Credits())
             raise StopIteration()
-        if option_pressed[0] == 'vong':
-            import vong
-            director.push(vong.VongGame())
+        if option_pressed[0] == 'vladfarty':
+            import vladfarty
+            director.push(vladfarty.VladFarty())
             raise StopIteration()
         if option_pressed[0] == 'ventilagon':
             import ventilagon_game
@@ -61,6 +61,17 @@ def main():
     director.register_strip(16, imagenes.tecno_estructuras_flat_png)
     director.register_strip(17, imagenes.menatwork_flat_png)
     director.register_strip(18, imagenes.yourgame_flat_png)
+    director.register_strip(19, imagenes.vga_pc734_png)
+    director.register_strip(20, imagenes.vga_cp437_png)
+    director.register_strip(21, imagenes.vlad_farting_flat_png)
+    director.register_strip(22, imagenes.farty_lion_flat_png)
+    director.register_strip(23, imagenes.ready_png)
+    director.register_strip(24, imagenes.bg64_flat_png)
+    director.register_strip(25, imagenes.copyright_png)
+    director.register_strip(26, imagenes.bgspeccy_flat_png)
+    director.register_strip(27, imagenes.reset_png)
+    director.register_strip(28, imagenes.farty_lionhead_flat_png)
+    #director.register_strip(19, imagenes.doom_flat_png)
 
     director.push(GamesMenu())
     director.run()

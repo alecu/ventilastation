@@ -12,7 +12,7 @@ typedef struct _sprite_obj_t {
     mp_obj_base_t   base;
     uint8_t x;
     uint8_t y;
-    int8_t frame;
+    uint8_t frame;
     const ImageStrip* image_strip;
     int8_t perspective;
     uint8_t sprite_id;
@@ -21,7 +21,7 @@ typedef struct _sprite_obj_t {
 #define NUM_SPRITES 100
 extern sprite_obj_t* sprites[NUM_SPRITES];
 
-#define NUM_IMAGES 20
+#define NUM_IMAGES 40
 extern const ImageStrip* image_stripes[NUM_IMAGES];
 
-static const int8_t DISABLED_FRAME = -1;
+static const uint8_t DISABLED_FRAME = 255;

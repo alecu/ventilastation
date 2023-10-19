@@ -2,7 +2,8 @@
 
 from PIL import Image
 import os
-from itertools import zip_longest
+import sys
+from itertools import zip_longest, chain
 import struct
 
 TRANSPARENT = (255, 0, 255)
@@ -36,12 +37,24 @@ attributes = {
   "marte_flat.png": (255, 25, 1, 0),
   "jupiter_flat.png": (255, 25, 1, 0),
   "saturno_flat.png": (255, 50, 1, 0),
+  "letters.png": (20, 20, 120, 0),
+  "vga_cp437.png": (9, 16, 255, 0),
+  "vga_pc734.png": (9, 16, 255, 0),
+  "ready.png": (48, 8, 2, 0),
+  "copyright.png": (128, 8, 1, 0),
 
   "tecno_estructuras_flat.png": (255, 54, 1, 0),
   "ventilastation_flat.png": (255, 54, 1, 0),
+  "doom_flat.png": (255, 54, 1, 0),
   "sves_flat.png": (255, 54, 1, 0),
   "yourgame_flat.png": (255, 54, 1, 0),
   "menatwork_flat.png": (255, 40, 1, 0),
+  "vlad_farting_flat.png": (255, 54, 1, 0),
+  "farty_lion_flat.png": (255, 54, 1, 0),
+  "farty_lionhead_flat.png": (255, 54, 1, 0),
+  "bg64_flat.png": (255, 54, 1, 0),
+  "bgspeccy_flat.png": (255, 54, 1, 0),
+  "reset.png": (128, 53, 5, 0),
 
   "menu.png": (64, 30, 4, 0),
   "credits.png": (64, 16, 32, 0),
@@ -68,6 +81,7 @@ for i in images:
 
 workspace.save("w1.png")
 
+import pprint
 workspace = workspace.convert("P", palette=Image.ADAPTIVE, dither=0)
 palette = list(grouper(workspace.getpalette(), 3))
 mi = palette.index(TRANSPARENT)
@@ -75,8 +89,15 @@ palorder = list(range(256))
 palorder[255] = mi
 palorder[mi] = 255
 workspace = workspace.remap_palette(palorder)
+pprint.pprint(list(grouper(workspace.getpalette(), 3)), stream=sys.stderr)
+
 palette = list(grouper(workspace.getpalette(), 3))
 mi = palette.index(TRANSPARENT)
+for n, c in enumerate(palette):
+    if (c == TRANSPARENT or c == (254, 0, 254)) and n != 255:
+        palette[n] = (255, 255, 0)
+print("transparent index=", palette.index(TRANSPARENT), file=sys.stderr)
+workspace.putpalette(chain.from_iterable(palette))
 workspace.save("w2.png")
 
 def gamma(value, gamma=2.5, offset=0.5):
@@ -89,6 +110,8 @@ pal_raw = []
 with open("raw/palette.pal", "wb") as pal:
     for c in palette:
         r, g, b = c
+        #if (r, g, b) == TRANSPARENT:
+            #r, g, b = 255, 255, 0
         #r, g, b = gamma(r), gamma(g), gamma(b)
         quad = bytearray((255, b, g, r))
         pal.write(quad)
@@ -109,7 +132,7 @@ sizes = []
 rom_strips = []
 
 for (j, i) in enumerate(images):
-    p = i.convert("RGB").quantize(palette=workspace, method=3)
+    p = i.convert("RGB").quantize(palette=workspace, colors=256, method=Image.FASTOCTREE, dither=Image.NONE)
     p.save("debug/xx%02d.png" % j)
     b = p.transpose(Image.ROTATE_270).tobytes()
     filename = i.filename.rsplit("/", 1)[-1]
