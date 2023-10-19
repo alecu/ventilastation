@@ -13,9 +13,7 @@ from deepspace import deepspace
 
 sounds = {}
 for sn in ["shoot1", "explosion2", "explosion3", "shoot3", "demo/vladfarty/hit",
-    "line", "triangle", "square", "pentagon", "superhexagon", "begin", "awesome", "die", "excellent", "gameover",
-    "menuchoose", "menuselect", "rankup", "start", "wonderful", "hexagon",
-    "es/super ventilagon", "es/buenisimo", "es/perdiste", "es/empeza", "es/linea",
+    "die", "es/super ventilagon", "es/buenisimo", "es/perdiste", "es/empeza", "es/linea",
     "es/triangulo", "es/cuadrado", "es/pentagono", "es/ventilagono"]:
     sounds[bytes(sn, "latin1")] = pyglet.media.load("sounds/%s.wav" % sn, streaming=False)
 
@@ -172,11 +170,14 @@ class PygletEngine():
                 accel = joystick.rz > 0
                 decel = joystick.z > 0
                 try:
-                    reset = joystick.buttons[8]
+                    reset = reset or joystick.buttons[8]
                 except:
-                    reset = joystick.buttons[7]
+                    reset = reset or joystick.buttons[7]
                 left = left or keys[key.LEFT]
                 right = right or keys[key.RIGHT]
+                up = up or keys[key.UP]
+                down = down or keys[key.DOWN]
+                boton = boton or keys[key.SPACE]
 
             except Exception:
                 left = keys[key.LEFT]
