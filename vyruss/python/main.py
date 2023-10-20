@@ -71,6 +71,7 @@ def main():
     director.register_strip(26, imagenes.bgspeccy_flat_png)
     director.register_strip(27, imagenes.reset_png)
     director.register_strip(28, imagenes.farty_lionhead_flat_png)
+    director.register_strip(29, imagenes.rainbow437_png)
     #director.register_strip(19, imagenes.doom_flat_png)
 
     director.push(GamesMenu())

@@ -4,13 +4,6 @@ from scene import Scene
 from sprites import Sprite, reset_sprites
 from urandom import randrange
 
-
-phrase_A = """[TBD Group] welcomes you to Vlad Farty, arguably the first demo for PoV displays.  A big ass fan + 107 LEDs + one ESP32 & open sourced, build your own to enjoy games AND demos."""
-
-phrase_B = """We have a beautiful world BUT it's quickly turning to the RIGHT!  Dictators and racists and orange clowns. Hate and selfishness. Even down here we copy the worst..."""
-
-phrase_C = """What do you plan to do? Drop the memes, get off your soma, build our own future."""
-
 credits = """
 [TBD Group]
 alecu
@@ -28,7 +21,6 @@ PVM
 Flashparty
 """.strip().split("\n")
 
-phrase = phrase_A
 
 RESET_SPEED = 2
 
@@ -42,9 +34,10 @@ def make_me_a_planet(n):
 
 
 class Letter(Sprite):
+  strip = 20
   def __init__(self):
     super().__init__()
-    self.set_strip(20)
+    self.set_strip(self.strip)
     self.set_frame(0)
     self.set_perspective(1)
 
@@ -73,6 +66,10 @@ class Letter(Sprite):
 
   def done(self):
     return 128 < self.x() < 140
+
+
+class RainbowLetter(Letter):
+  strip = 29
 
 #sinetable = list(range(16,32,1)) + list(range(32,16,-1))
 #sinetable = [24, 26, 27, 28, 30, 31, 31, 32, 32, 32, 31, 31, 30, 28, 27, 26, 24, 22, 21, 20, 18, 17, 17, 16, 16, 16, 17, 17, 18, 20, 21, 22]
@@ -203,8 +200,10 @@ class Ready(TimedScene):
 
 
 class Scroller(TimedScene):
+    letter_class = Letter
+
     def on_enter(self):
-        self.unused_letters = [Letter() for letter in range(25)]
+        self.unused_letters = [self.letter_class() for letter in range(50)]
         self.visible_letters = []
         self.n = 0
 
@@ -235,7 +234,7 @@ class Scroller(TimedScene):
 
 class Welcome(Scroller):
     duration = 60000
-    phrase = phrase_A
+    phrase = """[TBD Group] welcomes you to Vlad Farty, the first demo for PoV displays.  A big ass fan + 107 LEDs + one ESP32 & open sourced, build your own to enjoy games AND demos."""
 
     def step_letter(self, letter):
         letter.step(self.n)
@@ -243,7 +242,8 @@ class Welcome(Scroller):
 
 class BuildFuture(Scroller):
     duration = 60000
-    phrase = phrase_C
+    phrase = """What do you plan to do? Drop the memes, get off your soma, build our own future."""
+    letter_class = RainbowLetter
 
     def on_enter(self):
         super().on_enter()
@@ -307,7 +307,7 @@ class OrchestraHit(TimedScene):
 
 class WorldRight(Scroller):
     duration = 50206
-    phrase = phrase_B
+    phrase = """We have a beautiful world BUT it's quickly turning to the RIGHT!  Dictators and racists and orange clowns. Hate and selfishness. Even down here we copy the worst..."""
 
     def step_letter(self, letter):
         letter.step(letter.x())

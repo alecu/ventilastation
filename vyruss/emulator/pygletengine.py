@@ -62,6 +62,7 @@ image_stripes = {
     "26": imagenes.bgspeccy_flat_png,
     "27": imagenes.reset_png,
     "28": imagenes.farty_lionhead_flat_png,
+    "29": imagenes.rainbow437_png,
 }
 spritedata = bytearray( b"\0\0\0\xff\xff" * 100)
 
