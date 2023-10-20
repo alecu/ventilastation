@@ -173,17 +173,17 @@ class PygletEngine():
                     reset = reset or joystick.buttons[8]
                 except:
                     reset = reset or joystick.buttons[7]
-                left = left or keys[key.LEFT]
-                right = right or keys[key.RIGHT]
-                up = up or keys[key.UP]
-                down = down or keys[key.DOWN]
+                left = left or keys[key.LEFT] or keys[key.A]
+                right = right or keys[key.RIGHT] or keys[key.D]
+                up = up or keys[key.UP] or keys[key.W]
+                down = down or keys[key.DOWN] or keys[key.S]
                 boton = boton or keys[key.SPACE]
 
             except Exception:
-                left = keys[key.LEFT]
-                right = keys[key.RIGHT]
-                up = keys[key.UP]
-                down = keys[key.DOWN]
+                left = keys[key.LEFT] or keys[key.A]
+                right = keys[key.RIGHT] or keys[key.D]
+                up = keys[key.UP] or keys[key.W]
+                down = keys[key.DOWN] or keys[key.S]
 
                 boton = keys[key.SPACE]
                 accel = keys[key.A]
