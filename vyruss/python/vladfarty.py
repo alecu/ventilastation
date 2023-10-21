@@ -11,7 +11,7 @@ krakatoa
 mer
 chame
 
-and friends:
+y amigos:
 Club de Jaqueo
 Python Arg
 Tecnoestructuras
@@ -234,11 +234,10 @@ class Scroller(TimedScene):
         if not self.visible_letters:
             director.pop()
 
-
 class Welcome(Scroller):
     duration = 60000
-    part1 = """Welcome to Vlad Farty, the first demo for Ventilastation."""
-    phrase = part1 + """ 107 LEDs, ESP32 & open sourced."""
+    part1 = """Esto es Vlad Farty, la primer demo para"""
+    phrase = part1 + """ Ventilastation, la consola GPL hecha con LEDs y RPMs."""
 
     def on_enter(self):
         super().on_enter()
@@ -263,7 +262,7 @@ class Welcome(Scroller):
 
 class BuildFuture(Scroller):
     duration = 60000
-    phrase = """Drop the MemEs, get off your soma, build our future."""
+    phrase = """Deja los memes, corta la soma, construi nuestro futuro."""
     letter_class = RainbowLetter
 
     def on_enter(self):
@@ -307,10 +306,10 @@ class DancingLions(TimedScene):
             self.farty_lionhead.set_y(lionhead_size + 10)
 
 
-CHAMEPICS = 4
+CHAMEPICS = 7
 ANIMATE_SPEED = 15
 
-class ChamePic(TimedScene):
+class Chanimation(TimedScene):
     duration = 15000
 
     def on_enter(self):
@@ -330,7 +329,7 @@ class ChamePic(TimedScene):
             self.current_pic = numpic
             self.chame_pics[self.current_pic].set_frame(0)
         else:
-            other = numpic % 2
+            other = (numpic + 1) % 2
             self.chame_pics[self.current_pic].disable()
             self.current_pic = CHAMEPICS - 1 - other
             self.chame_pics[self.current_pic].set_frame(0)
@@ -350,7 +349,7 @@ class OrchestraHit(TimedScene):
 
 class WorldRight(Scroller):
     duration = 50206
-    phrase = """A beautiful world, quickly turning to the RIGHT!  Racists, dictators and orange clowns. Down here we copy the worst..."""
+    phrase = """Un lindo mundo, girando a la DERECHA! Racistas, dictadores y payasos anaranjados. Aca copiamos lo peor..."""
 
     def create_letters(self):
         return [RainbowLetter() if n % 2 else Letter() for n in range(50)]
@@ -545,7 +544,7 @@ scenes = [
     OrchestraHit,
     DancingLions,
     BuildFuture,
-    ChamePic,
+    Chanimation,
     OrchestraHit,
     Kudowz,
     Copyright,

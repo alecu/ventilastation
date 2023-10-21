@@ -63,10 +63,19 @@ image_stripes = {
     "27": imagenes.reset_png,
     "28": imagenes.farty_lionhead_flat_png,
     "29": imagenes.rainbow437_png,
-    "30": imagenes.chame01_flat_png,
-    "31": imagenes.chame02_flat_png,
-    "32": imagenes.chame03_flat_png,
-    "33": imagenes.chame04_flat_png,
+    "30": imagenes.chanime01_flat_png,
+    "31": imagenes.chanime02_flat_png,
+    "32": imagenes.chanime03_flat_png,
+    "33": imagenes.chanime04_flat_png,
+    "34": imagenes.chanime05_flat_png,
+    "35": imagenes.chanime06_flat_png,
+    "36": imagenes.chanime07_flat_png,
+    "37": imagenes.salto01_flat_png,
+    "38": imagenes.salto02_flat_png,
+    "39": imagenes.salto03_flat_png,
+    "40": imagenes.salto04_flat_png,
+    "41": imagenes.salto05_flat_png,
+    "42": imagenes.salto06_flat_png,
 }
 spritedata = bytearray( b"\0\0\0\xff\xff" * 100)
 
