@@ -10,6 +10,7 @@ n_leds = {
     "jupiter": 25,
     "saturno": 50,
     "menatwork": 40,
+    "vladfartylogo": 30,
 }
 
 allfiles = os.listdir(PATH)

@@ -50,6 +50,7 @@ attributes = {
   "sves_flat.png": (255, 54, 1, 0),
   "yourgame_flat.png": (255, 54, 1, 0),
   "menatwork_flat.png": (255, 40, 1, 0),
+  "vladfartylogo_flat.png": (255, 30, 1, 0),
   "vlad_farting_flat.png": (255, 54, 1, 0),
   "farty_lion_flat.png": (255, 54, 1, 0),
   "farty_lionhead_flat.png": (255, 54, 1, 0),

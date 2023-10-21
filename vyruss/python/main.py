@@ -60,7 +60,7 @@ def main():
     director.register_strip(15, imagenes.ventilastation_flat_png)
     director.register_strip(16, imagenes.tecno_estructuras_flat_png)
     director.register_strip(17, imagenes.menatwork_flat_png)
-    director.register_strip(18, imagenes.yourgame_flat_png)
+    director.register_strip(18, imagenes.vladfartylogo_flat_png)
     director.register_strip(19, imagenes.vga_pc734_png)
     director.register_strip(20, imagenes.vga_cp437_png)
     director.register_strip(21, imagenes.vlad_farting_flat_png)

@@ -51,7 +51,7 @@ image_stripes = {
     "15": imagenes.ventilastation_flat_png,
     "16": imagenes.tecno_estructuras_flat_png,
     "17": imagenes.menatwork_flat_png,
-    "18": imagenes.yourgame_flat_png,
+    "18": imagenes.vladfartylogo_flat_png,
     "19": imagenes.vga_pc734_png,
     "20": imagenes.vga_cp437_png,
     "21": imagenes.vlad_farting_flat_png,

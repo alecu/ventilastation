@@ -237,7 +237,7 @@ class Scroller(TimedScene):
 
 class Welcome(Scroller):
     duration = 60000
-    phrase = """[TBD Group] welcomes you to Vlad Farty, the first demo for PoV displays.  A big ass fan + 107 LEDs + one ESP32 & open sourced, build your own to enjoy games AND demos."""
+    phrase = """Welcome to Vlad Farty, the first demo for Ventilastation. 107 LEDs spinning, ESP32 & open sourced."""
     
     def step_letter(self, letter):
         letter.step(self.n)
@@ -245,7 +245,7 @@ class Welcome(Scroller):
 
 class BuildFuture(Scroller):
     duration = 60000
-    phrase = """What do you plan to do? Drop the memes, get off your soma, build our own future."""
+    phrase = """Drop the memes, get off your soma, build our future."""
     letter_class = RainbowLetter
 
     def on_enter(self):
@@ -257,8 +257,7 @@ class BuildFuture(Scroller):
 
 
 class DancingLions(TimedScene):
-    #duration = 23920
-    duration = 15000
+    duration = 11960 + 1500
 
     def on_enter(self):
         self.farty_lionhead = make_me_a_planet(28)
@@ -270,7 +269,7 @@ class DancingLions(TimedScene):
         self.n = 0
         self.call_later(self.duration - 1500, self.start_lionhead)
         director.music_play(b"demo/vladfarty/farty-lion")
-        self.increment = 1
+        self.increment = 2
 
     def start_lionhead(self):
         self.increment = -5
@@ -333,7 +332,7 @@ class OrchestraHit(TimedScene):
 
 class WorldRight(Scroller):
     duration = 50206
-    phrase = """We have a beautiful world BUT it's quickly turning to the RIGHT!  Dictators and racists and orange clowns. Hate and selfishness. Even down here we copy the worst..."""
+    phrase = """A beautiful world, quickly turning to the RIGHT!  Racists, dictators and orange clowns. Down here we copy the worst..."""
 
     def create_letters(self):
         return [RainbowLetter() if n % 2 else Letter() for n in range(50)]
@@ -460,19 +459,19 @@ class KudoLine:
 
     def step(self):
         if self.status == 0:
-            self.counter -= 5
+            self.counter -= 7
             if self.counter < 17:
                 self.counter = 17
                 self.status = 1
             for l in self.letters:
                 l.set_y(self.counter)
         elif self.status == 1:
-            self.counter += 1
+            self.counter += 2
             if self.counter > 70:
                 self.status = 2
                 self.counter = 17
         elif self.status == 2:
-            self.counter += 3
+            self.counter += 5
             for l in self.letters:
                 l.set_y(self.counter)
             if self.counter > 250:
@@ -486,13 +485,14 @@ class Kudowz(TimedScene):
     duration = 60000
 
     def on_enter(self):
+        self.background = make_me_a_planet(18)
+        self.background.set_y(255)
+        self.background.set_frame(0)
+
         self.kudolines = [KudoLine(19, 128, invert=True), KudoLine(20, 0, invert=False)]
         self.line = 0
         self.advance_line()
 
-        self.background = make_me_a_planet(24)
-        self.background.set_y(255)
-        self.background.set_frame(-1)
         director.music_play(b"demo/vladfarty/credits")
     
     def advance_line(self):
