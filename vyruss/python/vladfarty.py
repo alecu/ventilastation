@@ -212,7 +212,7 @@ class Scroller(TimedScene):
         self.n = 0
 
     def add_letter(self, char):
-        l = self.unused_letters.pop()
+        l = self.unused_letters.pop(0)
         l.set_char(char)
         self.visible_letters.append(l)
 
@@ -237,15 +237,33 @@ class Scroller(TimedScene):
 
 class Welcome(Scroller):
     duration = 60000
-    phrase = """Welcome to Vlad Farty, the first demo for Ventilastation. 107 LEDs spinning, ESP32 & open sourced."""
+    part1 = """Welcome to Vlad Farty, the first demo for Ventilastation."""
+    phrase = part1 + """ 107 LEDs, ESP32 & open sourced."""
+
+    def on_enter(self):
+        super().on_enter()
+        self.part2_started = False
+
+    def change_letters(self):
+        self.unused_letters = self.more_letters
+
+    def create_letters(self):
+        self.more_letters = [RainbowLetter() for _ in range(40)]
+        return super().create_letters()
     
     def step_letter(self, letter):
         letter.step(self.n)
 
+    def step(self):
+        super().step()
+        if not self.part2_started and self.n // 9 > len(self.part1):
+            self.part2_started = True
+            self.change_letters()
+
 
 class BuildFuture(Scroller):
     duration = 60000
-    phrase = """Drop the memes, get off your soma, build our future."""
+    phrase = """Drop the MemEs, get off your soma, build our future."""
     letter_class = RainbowLetter
 
     def on_enter(self):
@@ -320,7 +338,6 @@ class ChamePic(TimedScene):
     def step(self):
         self.n += 1
         self.update_pic()
-            
 
 
 class OrchestraHit(TimedScene):
@@ -329,6 +346,7 @@ class OrchestraHit(TimedScene):
     def on_enter(self):
         director.sound_play(b"demo/vladfarty/hit")
         director.music_off()
+
 
 class WorldRight(Scroller):
     duration = 50206
@@ -411,6 +429,7 @@ class Copyright(TimedScene):
             self.reset.disable()
             self.reset2.disable()
             self.copyright.set_frame(0)
+
 
         up = director.is_pressed(director.JOY_UP)
         down = director.is_pressed(director.JOY_DOWN)
