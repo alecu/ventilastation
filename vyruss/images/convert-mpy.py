@@ -56,6 +56,10 @@ attributes = {
   "bg64_flat.png": (255, 54, 1, 0),
   "bgspeccy_flat.png": (255, 54, 1, 0),
   "reset.png": (128, 53, 5, 0),
+  "chame01_flat.png": (255, 54, 1, 0),
+  "chame02_flat.png": (255, 54, 1, 0),
+  "chame03_flat.png": (255, 54, 1, 0),
+  "chame04_flat.png": (255, 54, 1, 0),
 
   "menu.png": (64, 30, 4, 0),
   "credits.png": (64, 16, 32, 0),

@@ -40,6 +40,7 @@ class Letter(Sprite):
     self.set_strip(self.strip)
     self.set_frame(0)
     self.set_perspective(1)
+    self.delta = 0
 
   def set_char(self, char):
     self.set_frame(ord(char))
@@ -202,17 +203,23 @@ class Ready(TimedScene):
 class Scroller(TimedScene):
     letter_class = Letter
 
+    def create_letters(self):
+        return [self.letter_class() for letter in range(25)]
+
     def on_enter(self):
-        self.unused_letters = [self.letter_class() for letter in range(50)]
+        self.unused_letters = self.create_letters()
         self.visible_letters = []
         self.n = 0
+
+    def add_letter(self, char):
+        l = self.unused_letters.pop()
+        l.set_char(char)
+        self.visible_letters.append(l)
 
     def step(self):
         if self.n % 9 == 0 and self.n // 9 < len(self.phrase):
             char = self.phrase[self.n // 9]
-            l = self.unused_letters.pop()
-            l.set_char(char)
-            self.visible_letters.append(l)
+            self.add_letter(char)
             #l.set_y(randrange(16,32))
 
         self.n = self.n + 1
@@ -227,15 +234,11 @@ class Scroller(TimedScene):
         if not self.visible_letters:
             director.pop()
 
-        if director.is_pressed(director.JOY_DOWN) and director.is_pressed(director.JOY_LEFT) and director.was_pressed(director.BUTTON_A):
-            self.planet.set_strip(19)
-
-
 
 class Welcome(Scroller):
     duration = 60000
     phrase = """[TBD Group] welcomes you to Vlad Farty, the first demo for PoV displays.  A big ass fan + 107 LEDs + one ESP32 & open sourced, build your own to enjoy games AND demos."""
-
+    
     def step_letter(self, letter):
         letter.step(self.n)
 
@@ -271,7 +274,7 @@ class DancingLions(TimedScene):
 
     def start_lionhead(self):
         self.increment = -5
-        self.farty_lionhead.set_y(200)
+        self.farty_lionhead.set_y(100)
         self.farty_lionhead.set_frame(0)
         director.music_off()
         director.sound_play(b"demo/vladfarty/hit")
@@ -282,20 +285,43 @@ class DancingLions(TimedScene):
             self.farty_lion.set_y(new_y)
         self.farty_lion.set_x(vibratto[self.n % tablelen]-24)
         self.n += 1
+        lionhead_size = self.farty_lionhead.y()
+        if 10 < lionhead_size < 200:
+            self.farty_lionhead.set_y(lionhead_size + 10)
 
+
+CHAMEPICS = 4
+ANIMATE_SPEED = 15
 
 class ChamePic(TimedScene):
     duration = 15000
 
     def on_enter(self):
-        self.chame_pic = make_me_a_planet(21)
-        self.chame_pic.set_y(255)
-        self.chame_pic.set_frame(0)
+        self.chame_pics = []
+        for n in range(CHAMEPICS):
+            chp = make_me_a_planet(30 + n)
+            self.chame_pics.append(chp)
+            chp.set_y(255)
         self.n = 0
+        self.current_pic = 0
+        self.update_pic()
+
+    def update_pic(self):
+        numpic = self.n // ANIMATE_SPEED
+        if numpic < len(self.chame_pics):
+            self.chame_pics[self.current_pic].disable()
+            self.current_pic = numpic
+            self.chame_pics[self.current_pic].set_frame(0)
+        else:
+            other = numpic % 2
+            self.chame_pics[self.current_pic].disable()
+            self.current_pic = CHAMEPICS - 1 - other
+            self.chame_pics[self.current_pic].set_frame(0)
 
     def step(self):
-        #self.chame_pic.set_x(vibratto[self.n % tablelen]-24)
         self.n += 1
+        self.update_pic()
+            
 
 
 class OrchestraHit(TimedScene):
@@ -309,8 +335,21 @@ class WorldRight(Scroller):
     duration = 50206
     phrase = """We have a beautiful world BUT it's quickly turning to the RIGHT!  Dictators and racists and orange clowns. Hate and selfishness. Even down here we copy the worst..."""
 
+    def create_letters(self):
+        return [RainbowLetter() if n % 2 else Letter() for n in range(50)]
+
+    def add_letter(self, char):
+        l = self.unused_letters.pop()
+        l.set_char(char)
+        self.visible_letters.append(l)
+        l = self.unused_letters.pop()
+        l.set_char(char)
+        l.set_x(l.x()+1)
+        l.delta = 2
+        self.visible_letters.append(l)
+
     def step_letter(self, letter):
-        letter.step(letter.x())
+        letter.step(letter.x() + letter.delta)
 
     def on_enter(self):
         super().on_enter()
