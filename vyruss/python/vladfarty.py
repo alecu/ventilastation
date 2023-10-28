@@ -306,15 +306,15 @@ class DancingLions(TimedScene):
             self.farty_lionhead.set_y(lionhead_size + 10)
 
 
-CHAMEPICS = 7
-ANIMATE_SPEED = 15
 
 class Chanimation(TimedScene):
     duration = 15000
+    CHAMEPICS = 7
+    ANIMATE_SPEED = 15
 
     def on_enter(self):
         self.chame_pics = []
-        for n in range(CHAMEPICS):
+        for n in range(self.CHAMEPICS):
             chp = make_me_a_planet(30 + n)
             self.chame_pics.append(chp)
             chp.set_y(255)
@@ -323,21 +323,45 @@ class Chanimation(TimedScene):
         self.update_pic()
 
     def update_pic(self):
-        numpic = self.n // ANIMATE_SPEED
+        numpic = self.n // self.ANIMATE_SPEED
         if numpic < len(self.chame_pics):
             self.chame_pics[self.current_pic].disable()
             self.current_pic = numpic
             self.chame_pics[self.current_pic].set_frame(0)
         else:
-            other = (numpic + 1) % 2
-            self.chame_pics[self.current_pic].disable()
-            self.current_pic = CHAMEPICS - 1 - other
-            self.chame_pics[self.current_pic].set_frame(0)
+            director.pop()
+            raise StopIteration()
 
     def step(self):
         self.n += 1
         self.update_pic()
 
+
+class Chanijump(TimedScene):
+    duration = 10000
+    CHAMEPICS = 6
+    ANIMATE_SPEED = 5
+    order = [0, 1, 2, 3, 4, 5, 5, 4, 3, 2, 1, 0]
+
+    def on_enter(self):
+        self.chame_pics = []
+        for n in range(self.CHAMEPICS):
+            chp = make_me_a_planet(37 + n)
+            self.chame_pics.append(chp)
+            chp.set_y(255)
+        self.n = 0
+        self.current_pic = 0
+        self.update_pic()
+
+    def update_pic(self):
+        numpic = self.order[ (self.n // self.ANIMATE_SPEED) % len(self.order) ]
+        self.chame_pics[self.current_pic].disable()
+        self.current_pic = numpic
+        self.chame_pics[self.current_pic].set_frame(0)
+
+    def step(self):
+        self.n += 1
+        self.update_pic()
 
 class OrchestraHit(TimedScene):
     duration = 1500
@@ -545,6 +569,7 @@ scenes = [
     DancingLions,
     BuildFuture,
     Chanimation,
+    Chanijump,
     OrchestraHit,
     Kudowz,
     Copyright,
