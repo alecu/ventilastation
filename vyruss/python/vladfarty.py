@@ -127,7 +127,9 @@ class TimedScene(Scene):
 
     def scene_step(self):
         super().scene_step()
-        if director.was_pressed(director.BUTTON_A):
+        left = director.is_pressed(director.JOY_LEFT)
+        right = director.is_pressed(director.JOY_RIGHT)
+        if director.was_pressed(director.BUTTON_A) and left and right:
             director.pop()
         if director.was_pressed(director.BUTTON_D):
             director.pop()
@@ -408,7 +410,7 @@ class WorldRight(Scroller):
 
 
 class Copyright(TimedScene):
-    duration = 60000
+    duration = 5000
 
     def on_enter(self):
         self.copyright = Sprite()
@@ -453,18 +455,6 @@ class Copyright(TimedScene):
             self.reset2.disable()
             self.copyright.set_frame(0)
 
-
-        up = director.is_pressed(director.JOY_UP)
-        down = director.is_pressed(director.JOY_DOWN)
-        y = self.copyright.y()
-        if up:
-            y += 1
-            print(y)
-        if down:
-            y -= 1
-            print(y)
-        self.copyright.set_y(y)
-        
 
 class KudoLine:
     def __init__(self, strip, xcenter, invert):
