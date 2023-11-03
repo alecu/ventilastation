@@ -1,5 +1,6 @@
 import comms
 import uctypes
+from urandom import randrange
 
 sprite_data = bytearray(b"\0\0\0\xff\xff" * 100)
 stripes = {}
@@ -16,3 +17,6 @@ def set_imagestrip(n, stripmap):
 
 def update():
     comms.send(b"sprites", sprite_data)
+
+def last_turn_duration():
+    return 1234000 + randrange(1000)
