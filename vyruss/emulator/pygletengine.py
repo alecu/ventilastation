@@ -250,7 +250,8 @@ class PygletEngine():
                     continue
 
                 strip = image_stripes["%d" % image]
-                w, h, total_frames, _pal = unpack("BBBB", strip[0:4])
+                w, h, total_frames, pal = unpack("BBBB", strip[0:4])
+                pal_base = 256 * pal
                 if w == 255: w = 256 # caso especial, para los planetas
                 pixeldata = memoryview(strip)[4:]
 
@@ -269,7 +270,7 @@ class PygletEngine():
                             index = pixeldata[src]
                             src += 1
                             if index != TRANSPARENT:
-                                color = upalette[index]
+                                color = upalette[index + pal_base]
                                 if perspective == 1:
                                     y = deepspace[y]
                                 else:
@@ -285,7 +286,7 @@ class PygletEngine():
                                 break
                             index = pixeldata[base + h - 1 - src]
                             if index != TRANSPARENT:
-                                color = upalette[index]
+                                color = upalette[index + pal_base]
                                 px = led * 4
                                 pixels[px:px+4] = [color] * 4
 
