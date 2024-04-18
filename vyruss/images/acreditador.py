@@ -2,7 +2,7 @@
 
 from PIL import Image
 
-cr = Image.open("credits.png")
+cr = Image.open("sources/credits.png")
 
 rodaja = 16
 num_rodajas = cr.height // rodaja
@@ -14,4 +14,4 @@ for j in range(num_rodajas):
     r = cr.crop((0, j * rodaja, cr.width, (j+1) * rodaja))
     workspace.paste(r, (cr.width * j, 0))
 
-workspace.save("galaga/credits.png")
+workspace.save("images/credits.png")

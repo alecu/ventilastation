@@ -7,7 +7,7 @@ from itertools import zip_longest, chain
 import struct
 
 TRANSPARENT = (255, 0, 255)
-FOLDER = "galaga"
+FOLDER = "images"
 
 # width, height, frames, palette
 attributes = {
@@ -96,7 +96,8 @@ for i in images:
     workspace.paste(i, (x, 0, x+i.width, i.height))
     x+=i.width
 
-workspace.save("w1.png")
+#Debug:
+#workspace.save("w1.png")
 
 import pprint
 workspace = workspace.convert("P", palette=Image.ADAPTIVE, dither=0)
@@ -115,7 +116,8 @@ for n, c in enumerate(palette):
         palette[n] = (255, 255, 0)
 print("transparent index=", palette.index(TRANSPARENT), file=sys.stderr)
 workspace.putpalette(chain.from_iterable(palette))
-workspace.save("w2.png")
+#Debug:
+#workspace.save("w2.png")
 
 def gamma(value, gamma=2.5, offset=0.5):
     assert 0 <= value <= 255
@@ -150,7 +152,8 @@ rom_strips = []
 
 for (j, i) in enumerate(images):
     p = i.convert("RGB").quantize(palette=workspace, colors=256, method=Image.FASTOCTREE, dither=Image.NONE)
-    p.save("debug/xx%02d.png" % j)
+    #Debug:
+    #p.save("debug/xx%02d.png" % j)
     b = p.transpose(Image.ROTATE_270).tobytes()
     filename = i.filename.rsplit("/", 1)[-1]
     attrs = bytes(attributes[filename])
