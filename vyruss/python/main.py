@@ -9,12 +9,17 @@ def update_over_the_air():
 class GamesMenu(menu.Menu):
     OPTIONS = [
         ('vyruss', 7, 0, 64),
+        ('bembi', 43, 0, 64),
         ('vladfarty', 7, 2, 64),
         #('credits', 7, 3, 64),
         #('ventap', 7, 4, 64),
-        ('bembi', 7, 4, 64),
         ('ventilagon', 7, 1, 64),
     ]
+
+    def on_enter(self):
+        super(GamesMenu, self).on_enter()
+        self.animation_frames = 0
+        self.pollitos = self.sprites[1]
 
     def on_option_pressed(self, option_index):
         option_pressed = self.options[option_index]
@@ -60,6 +65,9 @@ class GamesMenu(menu.Menu):
                 and director.is_pressed(director.BUTTON_B)\
                 and director.is_pressed(director.BUTTON_C):
                 update_over_the_air()
+            self.animation_frames += 1
+            pf = (self.animation_frames // 4) % 5
+            self.pollitos.set_frame(pf)
 
 def main():
     # init images
