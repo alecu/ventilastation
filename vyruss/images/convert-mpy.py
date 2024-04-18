@@ -71,8 +71,10 @@ attributes = {
   "salto05_flat.png": (255, 54, 1, 0),
   "salto06_flat.png": (255, 54, 1, 0),
 
-  "menu.png": (64, 30, 4, 0),
+  "menu.png": (64, 30, 5, 0),
   "credits.png": (64, 16, 32, 0),
+  "pollitos.png": (51, 19, 5, 0),
+  "bembi_flat.png": (255, 54, 1, 0),
 }
 
 def grouper(iterable, n, fillvalue=None):
