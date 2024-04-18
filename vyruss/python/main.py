@@ -11,7 +11,8 @@ class GamesMenu(menu.Menu):
         ('vyruss', 7, 0, 64),
         ('vladfarty', 7, 2, 64),
         #('credits', 7, 3, 64),
-        ('ventap', 7, 4, 64),
+        #('ventap', 7, 4, 64),
+        ('bembi', 7, 4, 64),
         ('ventilagon', 7, 1, 64),
     ]
 
@@ -25,6 +26,10 @@ class GamesMenu(menu.Menu):
         if option_pressed[0] == 'credits':
             import credits
             director.push(credits.Credits())
+            raise StopIteration()
+        if option_pressed[0] == 'bembi':
+            import bembi
+            director.push(bembi.Bembidiona())
             raise StopIteration()
         if option_pressed[0] == 'ventap':
             import ventap
