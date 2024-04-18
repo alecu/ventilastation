@@ -126,7 +126,7 @@ def gamma(value, gamma=2.5, offset=0.5):
 #print("unsigned long palette_pal[] PROGMEM = {")
 
 pal_raw = []
-with open("raw/palette.pal", "wb") as pal:
+with open("output/raw/palette.pal", "wb") as pal:
     for c in palette:
         r, g, b = c
         #if (r, g, b) == TRANSPARENT:
@@ -171,17 +171,17 @@ for (j, i) in enumerate(images):
     rom_strips.append(struct.pack("<16s", var_name.encode("utf-8")) + attrs + b)
     
     if ("fondo.png" in i.filename):
-        fn = "raw/" + i.filename.rsplit(".", 1)[0] + ".raw"
+        fn = "output/raw/" + i.filename.rsplit(".", 1)[0] + ".raw"
         with open(fn, "wb") as raw:
             raw.write(b)
     else:
         raws.append(b)
         sizes.append(p.size)
 
-with open("raw/images.raw", "wb") as raw:
+with open("output/raw/images.raw", "wb") as raw:
     raw.write(b"".join(raws))
 
-with open("sprites.rom", "wb") as rom:
+with open("output/sprites.rom", "wb") as rom:
     offset = 4 + len(rom_strips) * 4 + len(palettes) * 4
     rom.write(struct.pack("<HH", len(rom_strips), len(palettes)))
 
