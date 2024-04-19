@@ -14,7 +14,7 @@ class Bembidiona(Scene):
 
     def on_enter(self):
         self.pollitos = Sprite()
-        self.pollitos.set_x(-25)
+        self.pollitos.set_x(-32)
         self.pollitos.set_y(0)
         self.pollitos.set_strip(43)
         self.pollitos.set_frame(0)
