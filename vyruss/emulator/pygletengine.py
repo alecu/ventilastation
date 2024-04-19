@@ -20,7 +20,7 @@ for sn in ["shoot1", "explosion2", "explosion3", "shoot3", "demo/vladfarty/hit",
 for mn in ["credits", "vy-gameover", "vy-main", "vy-3warps", "1",
            "demo/vladfarty/intro", "demo/vladfarty/part2",
            "demo/vladfarty/farty-lion", "demo/vladfarty/credits",
-           "demo/vladfarty/happy-place"]:
+           "demo/vladfarty/happy-place", "piostart"]:
     sounds[bytes(mn, "latin1")] = pyglet.media.load("sounds/%s.wav" % mn, streaming=False)
 
 sound_queue = []
@@ -76,6 +76,8 @@ image_stripes = {
     "40": imagenes.salto04_flat_png,
     "41": imagenes.salto05_flat_png,
     "42": imagenes.salto06_flat_png,
+    "43": imagenes.pollitos_png,
+    "44": imagenes.bembi_flat_png,
 }
 spritedata = bytearray( b"\0\0\0\xff\xff" * 100)
 
@@ -248,7 +250,8 @@ class PygletEngine():
                     continue
 
                 strip = image_stripes["%d" % image]
-                w, h, total_frames, _pal = unpack("BBBB", strip[0:4])
+                w, h, total_frames, pal = unpack("BBBB", strip[0:4])
+                pal_base = 256 * pal
                 if w == 255: w = 256 # caso especial, para los planetas
                 pixeldata = memoryview(strip)[4:]
 
@@ -267,7 +270,7 @@ class PygletEngine():
                             index = pixeldata[src]
                             src += 1
                             if index != TRANSPARENT:
-                                color = upalette[index]
+                                color = upalette[index + pal_base]
                                 if perspective == 1:
                                     y = deepspace[y]
                                 else:
@@ -283,7 +286,7 @@ class PygletEngine():
                                 break
                             index = pixeldata[base + h - 1 - src]
                             if index != TRANSPARENT:
-                                color = upalette[index]
+                                color = upalette[index + pal_base]
                                 px = led * 4
                                 pixels[px:px+4] = [color] * 4
 

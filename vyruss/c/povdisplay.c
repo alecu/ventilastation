@@ -210,11 +210,17 @@ STATIC mp_obj_t povdisplay_getaddress(mp_obj_t sprite_num) {
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(povdisplay_getaddress_obj, povdisplay_getaddress);
 // ------------------------------
+STATIC mp_obj_t povdisplay_last_turn_duration() {
+    return mp_obj_new_int(last_turn_duration);
+}
+STATIC MP_DEFINE_CONST_FUN_OBJ_0(povdisplay_last_turn_duration_obj, povdisplay_last_turn_duration);
+// ------------------------------
 
 STATIC const mp_map_elem_t povdisplay_globals_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR___name__), MP_OBJ_NEW_QSTR(MP_QSTR_povdisplay) },
     { MP_OBJ_NEW_QSTR(MP_QSTR_init), (mp_obj_t)&povdisplay_init_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_getaddress), (mp_obj_t)&povdisplay_getaddress_obj },
+    { MP_OBJ_NEW_QSTR(MP_QSTR_last_turn_duration), (mp_obj_t)&povdisplay_last_turn_duration_obj },
 };
 
 STATIC MP_DEFINE_CONST_DICT (

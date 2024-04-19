@@ -7,7 +7,7 @@ from itertools import zip_longest, chain
 import struct
 
 TRANSPARENT = (255, 0, 255)
-FOLDER = "galaga"
+FOLDER = "images"
 
 # width, height, frames, palette
 attributes = {
@@ -33,10 +33,10 @@ attributes = {
   "10_newsat.png": (16, 16, 28, 0),
   "11_spock.png": (16, 16, 28, 0),
 
-  "tierra_flat.png": (255, 25, 1, 0),
-  "marte_flat.png": (255, 25, 1, 0),
-  "jupiter_flat.png": (255, 25, 1, 0),
-  "saturno_flat.png": (255, 50, 1, 0),
+  "tierra_flat.png": (255, 25, 1, 2),
+  "marte_flat.png": (255, 25, 1, 3),
+  "jupiter_flat.png": (255, 25, 1, 4),
+  "saturno_flat.png": (255, 50, 1, 5),
   "letters.png": (20, 20, 120, 0),
   "vga_cp437.png": (9, 16, 255, 0),
   "rainbow437.png": (9, 16, 255, 0),
@@ -46,33 +46,35 @@ attributes = {
 
   "tecno_estructuras_flat.png": (255, 54, 1, 0),
   "ventilastation_flat.png": (255, 54, 1, 0),
-  "doom_flat.png": (255, 54, 1, 0),
+  "doom_flat.png": (255, 54, 1, 8),
   "sves_flat.png": (255, 54, 1, 0),
   "yourgame_flat.png": (255, 54, 1, 0),
   "menatwork_flat.png": (255, 40, 1, 0),
   "vladfartylogo_flat.png": (255, 30, 1, 0),
   "vlad_farting_flat.png": (255, 54, 1, 0),
-  "farty_lion_flat.png": (255, 54, 1, 0),
-  "farty_lionhead_flat.png": (255, 54, 1, 0),
+  "farty_lion_flat.png": (255, 54, 1, 7),
+  "farty_lionhead_flat.png": (255, 54, 1, 7),
   "bg64_flat.png": (255, 54, 1, 0),
   "bgspeccy_flat.png": (255, 54, 1, 0),
   "reset.png": (128, 53, 5, 0),
-  "chanime01_flat.png": (255, 54, 1, 0),
-  "chanime02_flat.png": (255, 54, 1, 0),
-  "chanime03_flat.png": (255, 54, 1, 0),
-  "chanime04_flat.png": (255, 54, 1, 0),
-  "chanime05_flat.png": (255, 54, 1, 0),
-  "chanime06_flat.png": (255, 54, 1, 0),
-  "chanime07_flat.png": (255, 54, 1, 0),
-  "salto01_flat.png": (255, 54, 1, 0),
-  "salto02_flat.png": (255, 54, 1, 0),
-  "salto03_flat.png": (255, 54, 1, 0),
-  "salto04_flat.png": (255, 54, 1, 0),
-  "salto05_flat.png": (255, 54, 1, 0),
-  "salto06_flat.png": (255, 54, 1, 0),
+  "chanime01_flat.png": (255, 54, 1, 6),
+  "chanime02_flat.png": (255, 54, 1, 6),
+  "chanime03_flat.png": (255, 54, 1, 6),
+  "chanime04_flat.png": (255, 54, 1, 6),
+  "chanime05_flat.png": (255, 54, 1, 6),
+  "chanime06_flat.png": (255, 54, 1, 6),
+  "chanime07_flat.png": (255, 54, 1, 6),
+  "salto01_flat.png": (255, 54, 1, 6),
+  "salto02_flat.png": (255, 54, 1, 6),
+  "salto03_flat.png": (255, 54, 1, 6),
+  "salto04_flat.png": (255, 54, 1, 6),
+  "salto05_flat.png": (255, 54, 1, 6),
+  "salto06_flat.png": (255, 54, 1, 6),
 
-  "menu.png": (64, 30, 4, 0),
+  "menu.png": (64, 30, 5, 0),
   "credits.png": (64, 16, 32, 0),
+  "pollitos.png": (51, 19, 5, 1),
+  "bembi_flat.png": (255, 54, 1, 1),
 }
 
 def grouper(iterable, n, fillvalue=None):
@@ -81,102 +83,114 @@ def grouper(iterable, n, fillvalue=None):
     args = [iter(iterable)] * n
     return zip_longest(*args, fillvalue=fillvalue)
 
-filenames = [f for f in os.listdir(FOLDER) if f.endswith(".png")]
-
-images = [Image.open(os.path.join(FOLDER, f)) for f in filenames]
-
-w_size = (sum(i.width for i in images), max(i.height for i in images))
-
-workspace = Image.new("RGB", w_size, (255,0,255))
-
-x = 0
-for i in images:
-    workspace.paste(i, (x, 0, x+i.width, i.height))
-    x+=i.width
-
-workspace.save("w1.png")
-
-import pprint
-workspace = workspace.convert("P", palette=Image.ADAPTIVE, dither=0)
-palette = list(grouper(workspace.getpalette(), 3))
-mi = palette.index(TRANSPARENT)
-palorder = list(range(256))
-palorder[255] = mi
-palorder[mi] = 255
-workspace = workspace.remap_palette(palorder)
-pprint.pprint(list(grouper(workspace.getpalette(), 3)), stream=sys.stderr)
-
-palette = list(grouper(workspace.getpalette(), 3))
-mi = palette.index(TRANSPARENT)
-for n, c in enumerate(palette):
-    if (c == TRANSPARENT or c == (254, 0, 254)) and n != 255:
-        palette[n] = (255, 255, 0)
-print("transparent index=", palette.index(TRANSPARENT), file=sys.stderr)
-workspace.putpalette(chain.from_iterable(palette))
-workspace.save("w2.png")
-
 def gamma(value, gamma=2.5, offset=0.5):
     assert 0 <= value <= 255
     return int( pow( float(value) / 255.0, gamma ) * 255.0 + offset )
+
+images_per_palette = {}
+
+for filename, attrs in attributes.items():
+    w, h, frames, pal = attrs
+    images_per_palette.setdefault(pal, []).append(filename)
     
-#print("unsigned long palette_pal[] PROGMEM = {")
-
-pal_raw = []
-with open("raw/palette.pal", "wb") as pal:
-    for c in palette:
-        r, g, b = c
-        #if (r, g, b) == TRANSPARENT:
-            #r, g, b = 255, 255, 0
-        #r, g, b = gamma(r), gamma(g), gamma(b)
-        quad = bytearray((255, b, g, r))
-        pal.write(quad)
-        #print("    0x%02x%02x%02x%02x," % (r, g, b, 255))
-        pal_raw.append(quad)
-
-#print("};")
-#print()
-
-print("palette_pal =", b"".join(pal_raw))
-print()
-
-palettes = [b"".join(pal_raw)]
-
+#print(images_per_palette, file=sys.stderr)
+#print(sorted(images_per_palette.items()), file=sys.stderr)
+#raise Exception
+    
 raws = []
 sizes = []
-
 rom_strips = []
+palettes = []
 
-for (j, i) in enumerate(images):
-    p = i.convert("RGB").quantize(palette=workspace, colors=256, method=Image.FASTOCTREE, dither=Image.NONE)
-    p.save("debug/xx%02d.png" % j)
-    b = p.transpose(Image.ROTATE_270).tobytes()
-    filename = i.filename.rsplit("/", 1)[-1]
-    attrs = bytes(attributes[filename])
+for palnumber, filenames in sorted(images_per_palette.items()):
+    images = [Image.open(os.path.join(FOLDER, f)) for f in filenames]
 
-    var_name = filename.replace(".", "_")
-    if var_name.startswith("0") or var_name.startswith("1"):
-        var_name = "_" + var_name
-    print(var_name, "=", repr(attrs + b))
-    #print("unsigned char %s[] PROGMEM = {" % var_name)
-    for g in grouper(("0x%02x" % n for n in b), 8):
-        #print("    " + ", ".join(g) + ",")
-        pass
+    w_size = (sum(i.width for i in images) + 1, max(i.height for i in images) + 1)
+
+    workspace = Image.new("RGB", w_size, (255,0,255))
+
+    x = 0
+    for i in images:
+        workspace.paste(i, (x, 0, x+i.width, i.height))
+        x+=i.width
+
+    #Debug:
+    #workspace.save("w1.png")
+
+    import pprint
+    workspace = workspace.convert("P", palette=Image.ADAPTIVE, dither=0)
+    palette = list(grouper(workspace.getpalette(), 3))
+    mi = palette.index(TRANSPARENT)
+    palorder = list(range(256))
+    palorder[255] = mi
+    palorder[mi] = 255
+    workspace = workspace.remap_palette(palorder)
+    pprint.pprint(list(grouper(workspace.getpalette(), 3)), stream=sys.stderr)
+
+    palette = list(grouper(workspace.getpalette(), 3))
+    mi = palette.index(TRANSPARENT)
+    for n, c in enumerate(palette):
+        if (c == TRANSPARENT or c == (254, 0, 254)) and n != 255:
+            palette[n] = (255, 255, 0)
+    print("transparent index=", palette.index(TRANSPARENT), file=sys.stderr)
+    workspace.putpalette(chain.from_iterable(palette))
+    #Debug:
+    #workspace.save("w2.png")
+
+    #print("unsigned long palette_pal[] PROGMEM = {")
+
+    pal_raw = []
+    with open("output/raw/palette.pal", "wb") as pal:
+        for c in palette:
+            r, g, b = c
+            #if (r, g, b) == TRANSPARENT:
+                #r, g, b = 255, 255, 0
+            #r, g, b = gamma(r), gamma(g), gamma(b)
+            quad = bytearray((255, b, g, r))
+            pal.write(quad)
+            #print("    0x%02x%02x%02x%02x," % (r, g, b, 255))
+            pal_raw.append(quad)
+
     #print("};")
-    print()
-    rom_strips.append(struct.pack("<16s", var_name.encode("utf-8")) + attrs + b)
-    
-    if ("fondo.png" in i.filename):
-        fn = "raw/" + i.filename.rsplit(".", 1)[0] + ".raw"
-        with open(fn, "wb") as raw:
-            raw.write(b)
-    else:
-        raws.append(b)
-        sizes.append(p.size)
+    #print()
 
-with open("raw/images.raw", "wb") as raw:
+    palettes.append(b"".join(pal_raw))
+
+    for (j, i) in enumerate(images):
+        p = i.convert("RGB").quantize(palette=workspace, colors=256, method=Image.FASTOCTREE, dither=Image.NONE)
+        #Debug:
+        #p.save("debug/xx%02d.png" % j)
+        b = p.transpose(Image.ROTATE_270).tobytes()
+        filename = i.filename.rsplit("/", 1)[-1]
+        attrs = bytes(attributes[filename])
+
+        var_name = filename.replace(".", "_")
+        if var_name.startswith("0") or var_name.startswith("1"):
+            var_name = "_" + var_name
+        print(var_name, "=", repr(attrs + b))
+        #print("unsigned char %s[] PROGMEM = {" % var_name)
+        for g in grouper(("0x%02x" % n for n in b), 8):
+            #print("    " + ", ".join(g) + ",")
+            pass
+        #print("};")
+        print()
+        rom_strips.append(struct.pack("<16s", var_name.encode("utf-8")) + attrs + b)
+        
+        if ("fondo.png" in i.filename):
+            fn = "output/raw/" + i.filename.rsplit(".", 1)[0] + ".raw"
+            with open(fn, "wb") as raw:
+                raw.write(b)
+        else:
+            raws.append(b)
+            sizes.append(p.size)
+
+print("palette_pal =", repr(b"".join(palettes)))
+print()
+
+with open("output/raw/images.raw", "wb") as raw:
     raw.write(b"".join(raws))
 
-with open("sprites.rom", "wb") as rom:
+with open("output/sprites.rom", "wb") as rom:
     offset = 4 + len(rom_strips) * 4 + len(palettes) * 4
     rom.write(struct.pack("<HH", len(rom_strips), len(palettes)))
 

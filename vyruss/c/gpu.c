@@ -113,6 +113,7 @@ void render(int column, uint32_t* pixels) {
       // ESP_LOGD(TAG, "           frame=%d", s->frame);
       continue;
     }
+    uint32_t* current_palette = palette_pal + 256 * is->palette;
     int width = is->frame_width;
     if (width == 255) width++; // caso especial, para los planetas
     int visible_column = get_visible_column(s->x, width, column);
@@ -134,7 +135,7 @@ void render(int column, uint32_t* pixels) {
             } else {
               px_y = PIXELS - 1 - y;
             }
-            set_pixel(px_y, palette_pal[color]);
+            set_pixel(px_y, current_palette[color]);
           }
         }
       } else {
@@ -146,7 +147,7 @@ void render(int column, uint32_t* pixels) {
           }
           uint8_t color = is->data[base + height - 1 - src];
           if (color != TRANSPARENT) {
-            set_pixel(led, palette_pal[color]);
+            set_pixel(led, current_palette[color]);
           }
         }
       }

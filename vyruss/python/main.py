@@ -9,10 +9,17 @@ def update_over_the_air():
 class GamesMenu(menu.Menu):
     OPTIONS = [
         ('vyruss', 7, 0, 64),
+        ('bembi', 43, 0, 64),
         ('vladfarty', 7, 2, 64),
-        ('credits', 7, 3, 64),
+        #('credits', 7, 3, 64),
+        #('ventap', 7, 4, 64),
         ('ventilagon', 7, 1, 64),
     ]
+
+    def on_enter(self):
+        super(GamesMenu, self).on_enter()
+        self.animation_frames = 0
+        self.pollitos = self.sprites[1]
 
     def on_option_pressed(self, option_index):
         option_pressed = self.options[option_index]
@@ -25,6 +32,14 @@ class GamesMenu(menu.Menu):
             import credits
             director.push(credits.Credits())
             raise StopIteration()
+        if option_pressed[0] == 'bembi':
+            import bembi
+            director.push(bembi.Bembidiona())
+            raise StopIteration()
+        if option_pressed[0] == 'ventap':
+            import ventap
+            director.push(ventap.Ventap())
+            raise StopIteration()
         if option_pressed[0] == 'vladfarty':
             import vladfarty
             director.push(vladfarty.VladFarty())
@@ -34,12 +49,25 @@ class GamesMenu(menu.Menu):
             director.push(ventilagon_game.VentilagonGame())
             raise StopIteration()
 
+    def check_debugmode(self):
+        if (director.is_pressed(director.JOY_UP)
+            and director.is_pressed(director.JOY_LEFT)
+            and director.is_pressed(director.JOY_RIGHT)
+            and director.is_pressed(director.BUTTON_A) ):
+            import debugmode
+            director.push(debugmode.DebugMode())
+            return True
+            
     def step(self):
-        super(GamesMenu, self).step()
-        if director.is_pressed(director.BUTTON_D) \
-            and director.is_pressed(director.BUTTON_B)\
-            and director.is_pressed(director.BUTTON_C):
-            update_over_the_air()
+        if not self.check_debugmode():
+            super(GamesMenu, self).step()
+            if director.is_pressed(director.BUTTON_D) \
+                and director.is_pressed(director.BUTTON_B)\
+                and director.is_pressed(director.BUTTON_C):
+                update_over_the_air()
+            self.animation_frames += 1
+            pf = (self.animation_frames // 4) % 5
+            self.pollitos.set_frame(pf)
 
 def main():
     # init images
@@ -85,7 +113,8 @@ def main():
     director.register_strip(40, imagenes.salto04_flat_png)
     director.register_strip(41, imagenes.salto05_flat_png)
     director.register_strip(42, imagenes.salto06_flat_png)
-    #director.register_strip(19, imagenes.doom_flat_png)
+    director.register_strip(43, imagenes.pollitos_png)
+    director.register_strip(44, imagenes.bembi_flat_png)
 
     director.push(GamesMenu())
     director.run()

@@ -1,1 +1,1 @@
-../images/imagenes.py
+../python/imagenes.py

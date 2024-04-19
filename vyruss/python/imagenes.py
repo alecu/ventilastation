@@ -1,1 +1,1 @@
-../images/imagenes.py
+../images/output/imagenes.py
