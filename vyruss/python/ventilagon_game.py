@@ -28,7 +28,7 @@ class VentilagonGame(Scene):
             self.last_buttons = buttons
             ventilagon.received(buttons)
 
-        if director.was_pressed(director.BUTTON_D):
+        if director.was_pressed(director.BUTTON_D) or director.timedout:
             director.pop()
             raise StopIteration()
 

@@ -31,7 +31,7 @@ class Bembidiona(Scene):
         pf = (self.animation_frames // 4) % 5
         self.pollitos.set_frame(pf)
 
-        if director.was_pressed(director.BUTTON_D):
+        if director.was_pressed(director.BUTTON_D) or director.timedout:
             self.finished()
 
     def finished(self):

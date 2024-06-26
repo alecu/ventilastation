@@ -8,6 +8,7 @@ import sprites
 import gc
 
 DEBUG = False
+INPUT_TIMEOUT = 62 * 1000  # 62 segundos de inactividad, volver al menu
 
 try:
     from remotepov import update
@@ -44,6 +45,8 @@ class Director:
         self.scene_stack = []
         self.buttons = 0
         self.last_buttons = 0
+        self.last_player_action = utime.ticks_ms()
+        self.timedout = False
         gc.disable()
         sprites.reset_sprites()
 
@@ -88,7 +91,8 @@ class Director:
     def run(self):
         while True:
             scene = self.scene_stack[-1]
-            next_loop = utime.ticks_add(utime.ticks_ms(), 30)
+            now = utime.ticks_ms()
+            next_loop = utime.ticks_add(now, 30)
 
             val = comms.receive(1)
             if val:
@@ -99,7 +103,11 @@ class Director:
             except StopIteration:
                 pass
 
-            self.last_buttons = self.buttons
+            if self.last_buttons != self.buttons:
+                self.last_player_action = now
+                self.last_buttons = self.buttons
+
+            self.timedout = utime.ticks_diff(now, self.last_player_action) > INPUT_TIMEOUT
 
             # TODO check this hack
             update()

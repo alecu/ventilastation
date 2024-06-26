@@ -224,7 +224,7 @@ class VyrusGame(Scene):
         right = director.is_pressed(director.JOY_RIGHT)
         self.heading(up, down, left, right)
 
-        if director.was_pressed(director.BUTTON_D):
+        if director.was_pressed(director.BUTTON_D) or director.timedout:
             director.pop()
             raise StopIteration()
 
