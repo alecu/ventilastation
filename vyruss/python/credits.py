@@ -18,8 +18,10 @@ def make_me_a_planet(n):
 
 class Credits(Scene):
 
-    def on_enter(self):
+    def start_music(self):
         director.music_play("credits")
+
+    def on_enter(self):
         self.vs = make_me_a_planet(15)
         self.vs.set_frame(0)
         self.te = make_me_a_planet(16)
@@ -38,6 +40,7 @@ class Credits(Scene):
         self.sprites.reverse()
         self.call_later(TITLE_DELAYS, self.start_scrolling)
         self.scrolling = False
+        self.call_later(100, self.start_music)
 
     def start_scrolling(self):
         self.vs.disable()
