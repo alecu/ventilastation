@@ -17,7 +17,7 @@ def make_me_a_planet(n):
 
 
 char_width = 9
-char_height = 16
+char_height = 12
 display_len = 12
 
 class TextDisplay:
@@ -46,6 +46,7 @@ class DebugMode(Scene):
     def on_enter(self):
         self.us_display = TextDisplay(char_height)
         self.fps_display = TextDisplay(0)
+        self.rpm_display = TextDisplay(char_height * 2)
 
     def step(self):
         last_turn_duration = povdisplay.last_turn_duration()
@@ -53,6 +54,8 @@ class DebugMode(Scene):
         self.us_display.set_value(microseconds[:display_len])
         fps = "%.2f fps" % (1000000 / last_turn_duration * 2) # doubled due to two blades
         self.fps_display.set_value(fps[:display_len])
+        rpms = "%.2f RPM" % (60000000 / last_turn_duration)
+        self.rpm_display.set_value(rpms[:display_len])
 
         if director.was_pressed(director.BUTTON_D):
             self.finished()
