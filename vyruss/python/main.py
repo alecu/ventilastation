@@ -61,10 +61,13 @@ class GamesMenu(menu.Menu):
     def step(self):
         if not self.check_debugmode():
             super(GamesMenu, self).step()
+
             if director.is_pressed(director.BUTTON_D) \
                 and director.is_pressed(director.BUTTON_B)\
                 and director.is_pressed(director.BUTTON_C):
-                update_over_the_air()
+                pass
+                #update_over_the_air()
+
             self.animation_frames += 1
             pf = (self.animation_frames // 4) % 5
             self.pollitos.set_frame(pf)
@@ -120,4 +123,8 @@ def main():
     director.run()
 
 if __name__ == '__main__':
-    main()
+    import machine
+    try:
+        main()
+    except:
+        machine.reboot()
