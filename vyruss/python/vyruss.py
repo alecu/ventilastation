@@ -5,6 +5,8 @@ from director import director
 from scene import Scene
 from sprites import Sprite, reset_sprites
 
+import credits
+
 
 LEVELS = [
     # oleadas, planeta, disparos_simultaneos
@@ -292,6 +294,7 @@ class VyrusGame(Scene):
         self.level += 1
         if self.level >= len(LEVELS):
             director.pop()
+            director.push(credits.Credits())
             raise StopIteration()
         self.start_level()
 
