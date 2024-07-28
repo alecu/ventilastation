@@ -9,7 +9,8 @@ def update_over_the_air():
 class GamesMenu(menu.Menu):
     OPTIONS = [
         ('vyruss', 7, 0, 64),
-        ('bembi', 43, 0, 64),
+        #('bembi', 43, 0, 64),
+        ('tutorial', 43, 0, 64),
         ('vladfarty', 7, 2, 64),
         #('credits', 7, 3, 64),
         #('ventap', 7, 4, 64),
@@ -31,6 +32,10 @@ class GamesMenu(menu.Menu):
         if option_pressed[0] == 'credits':
             import credits
             director.push(credits.Credits())
+            raise StopIteration()
+        if option_pressed[0] == 'tutorial':
+            import tutorial
+            director.push(tutorial.Tutorial())
             raise StopIteration()
         if option_pressed[0] == 'bembi':
             import bembi

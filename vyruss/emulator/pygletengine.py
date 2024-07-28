@@ -202,8 +202,8 @@ class PygletEngine():
                 down = keys[key.DOWN] or keys[key.S]
 
                 boton = keys[key.SPACE]
-                accel = keys[key.A]
-                decel = keys[key.D]
+                accel = keys[key.PAGEUP]
+                decel = keys[key.PAGEDOWN]
 
             val = (left << 0 | right << 1 | up << 2 | down << 3 | boton << 4 |
                     accel << 5 | decel << 6 | reset << 7)

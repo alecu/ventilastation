@@ -64,6 +64,9 @@ class Sprite:
     def set_frame(self, value):
         self._sprite.frame = value
 
+    def perspective(self):
+        return self._sprite.perspective
+
     def set_perspective(self, value):
         self._sprite.perspective = value
 
